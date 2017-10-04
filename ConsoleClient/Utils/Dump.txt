@@ -1,0 +1,30 @@
+﻿            var testCases = new[] { 100000 };
+            //var testCases = new[] { 1000, 10000 };
+            Stopwatch stopwatch = new Stopwatch();
+            foreach (var tc in testCases)
+            {
+                var records = SerializarionHelpers.GenerateRecords(tc);
+                for (var i = 0; i < 11; i++)
+                {
+
+                    var rec = JsonSerialization.Serialize(records);
+                    stopwatch.Restart();
+                    var res = JsonSerialization.Deserialize(rec);
+                    stopwatch.Stop();
+                    Console.Write("json: " + stopwatch.Elapsed + " ");
+
+                    var rec1 = ProtoBufSerialization.Serialize(records);
+                    stopwatch.Restart();
+                    var res1 = ProtoBufSerialization.Deserialize(rec1);
+                    stopwatch.Stop();
+                    Console.Write("protobuf: " + stopwatch.Elapsed + " ");
+
+                    var rec2 = MessagePackSerialization.Serialize(records);
+                    stopwatch.Restart();
+                    var res2 = MessagePackSerialization.Deserialize(rec2);
+                    stopwatch.Stop();
+                    Console.Write("msgPack: " + stopwatch.Elapsed + "\n");
+                }
+                Console.WriteLine("-------------------------------------------------");
+            }
+            Console.ReadKey();
